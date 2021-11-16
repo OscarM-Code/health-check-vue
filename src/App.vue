@@ -39,7 +39,7 @@ export default {
     }
   },
   async beforeCreate() {
-    await fetch(`http://localhost:3000/api/categories`, {
+    await fetch(`https://warm-inlet-55236.herokuapp.com/api/categories`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -153,6 +153,7 @@ header > div:nth-child(1) > h1
 
 .nav > div
 {
+  min-width: 16rem;
   display: flex;
   flex-direction: column;
   border: 2px solid #ffffff;

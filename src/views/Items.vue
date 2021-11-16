@@ -39,7 +39,7 @@ export default {
         const customRoute = this.$route.params.item
           ? this.$route.params.item
           : null;
-        await fetch(`http://localhost:3000/api/categories/${customRoute}`, {
+        await fetch(`https://warm-inlet-55236.herokuapp.com/api/categories/${customRoute}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -60,7 +60,7 @@ export default {
         const customRoute = this.$route.params.item
           ? this.$route.params.item
           : null;
-        await fetch(`http://localhost:3000/api/categories/${customRoute}`, {
+        await fetch(`https://warm-inlet-55236.herokuapp.com/api/categories/${customRoute}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

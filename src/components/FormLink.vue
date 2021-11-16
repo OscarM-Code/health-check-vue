@@ -46,7 +46,7 @@ export default {
         health: true,
         category: this.category,
       };
-      fetch("http://localhost:3000/api/links", {
+      fetch("https://warm-inlet-55236.herokuapp.com/api/links", {
         method: "POST",
         headers: {
           Accept: "application/json",

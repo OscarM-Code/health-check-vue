@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     selectLink() {
-      fetch(`http://localhost:3000/api/categories/${this.category}`, {
+      fetch(`https://warm-inlet-55236.herokuapp.com/api/categories/${this.category}`, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -104,7 +104,7 @@ export default {
         newCategory: this.newCat || null,
       };
       if ((this.method !== index.method || this.newLink !== index.link || this.category !== this.newCat && this.action === "PUT") || this.action === "DELETE") {
-        fetch(`http://localhost:3000/api/links/${this.selectedLink}`, {
+        fetch(`https://warm-inlet-55236.herokuapp.com/api/links/${this.selectedLink}`, {
           method: this.action,
           headers: {
             Accept: "application/json",
