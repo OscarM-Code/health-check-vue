@@ -1,9 +1,16 @@
 <template>
-  <form id="categoryForm" @submit.prevent="addCategory" method="POST">
-    <h2>Add category</h2>
-    <label for="getName">Enter the name for the new category</label>
-    <input type="text" id="getName" placeholder="Name here" v-model="nameC" />
-    <button>Add +</button>
+  <form ref="addCat" id="categoryForm" @submit.prevent="addCategory" method="POST">
+    <div @click="toggleCatForm">
+      <h2>Add category</h2>
+      <img src="../assets/img/dropDown.png" ref="btnAddCat">
+    </div>
+    <div>
+        <div>
+          <label for="getName">Enter the name for the new category</label>
+          <input type="text" id="getName" placeholder="Name here" v-model="nameC" />
+        </div>
+      <button>Add +</button>
+    </div>
   </form>
 </template>
 
@@ -22,11 +29,12 @@ export default {
       let data = {
         name: this.nameC,
       };
-      fetch("https://warm-inlet-55236.herokuapp.com/api/categories", {
+      fetch("http://warm-inlet-55236.herokuapp.com/api/categories", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          "x-access-token": localStorage.getItem("token")
         },
         body: JSON.stringify(data),
       })
@@ -36,6 +44,10 @@ export default {
             this.toast("Category Create.", "success");
         })
         .catch((e) => this.toast("An error was occured.", "danger"));
+    },
+    toggleCatForm(){
+      this.$refs.addCat.classList.toggle('active');
+      this.$refs.btnAddCat.classList.toggle('active');
     }
   },
   setup() {
@@ -54,7 +66,28 @@ export default {
 
 <style>
 
+#categoryForm > div > *
+{
+  margin: 2rem;
+}
+
+#categoryForm > div:nth-child(2) > div
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+#categoryForm > div:nth-child(2)
+{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
 #categoryForm button {
+  height: 3rem;
   padding: 0 1rem;
 }
 

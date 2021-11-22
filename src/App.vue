@@ -1,27 +1,37 @@
 <template>
-  <header>
-    <div>
-      <h1>Health Check</h1>
-      <p>Check health of your link</p>
-    </div>
-  </header>
-    <div ref="nav" class="nav">
-      <router-link to="/">Home</router-link>
+    <div ref="nav" class="nav" v-if="userData">
       <div>
         <p>Categories:</p>
         <router-link v-for="link in links" :key="link" :to="'/items/' + link.id" @click="toggleMenu"> {{ link.name[0].toUpperCase() + link.name.slice(1) }} </router-link>
         </div>
       <router-link to="/options" @click="toggleMenu">Options</router-link>
+      <div id="logout" ref="logout">
+        <div>
+          <p>User:</p>
+          <h2>{{ userData.first_name + " " + userData.last_name }}</h2>
+        </div>
+        <img src="./assets/img/logout.png" @click="toggleLogout">
+        <div>
+          <p>Logout ?</p>
+          <div>
+            <button @click="logoutReturn">Yes</button>
+            <button @click="toggleLogout">No</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div ref="toogle" class="toggle" @click="toggleMenu"></div>
+    <div ref="toogle" class="toggle" @click="toggleMenu" v-if="userData"></div>
   <router-view/>
 </template>
 
 <script>
+import VueJwtDecode from "vue-jwt-decode";
+
 export default {
   data(){
     return {
-      storeLinks: this.$store.state.allLinks
+      storeLinks: this.$store.state.allLinks,
+      userData: localStorage.getItem("token") ? VueJwtDecode.decode(localStorage.getItem("token")) : null
     }
   },
   computed: {
@@ -36,20 +46,47 @@ export default {
     toggleMenu(){
       this.$refs.nav.classList.toggle('active');
       this.$refs.toogle.classList.toggle('active');
+    },
+    toggleLogout(){
+      this.$refs.logout.classList.toggle('active');
+    },
+    logout(){
+      localStorage.removeItem("token");
+      this.$router.push("/")
+    },
+    logoutReturn(){
+      this.logout()
+      this.toggleMenu()
+      this.toggleLogout()
+      setTimeout(() => {
+        window.location.reload();
+      }, 500)
     }
   },
   async beforeCreate() {
-    await fetch(`https://warm-inlet-55236.herokuapp.com/api/categories`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
+    if(localStorage.getItem("token")){
+      let userData = await VueJwtDecode.decode(localStorage.getItem("token"));
+      let link;
+      if(userData.role === "ROLE_ADMIN"){
+        link = `http://warm-inlet-55236.herokuapp.com/api/categories`
       }
-    })
-      .then((response) => response.json())
-      .then(async (link) => {
-        await this.$store.commit('getAllLinks', link);
-        this.setBtn();
-      });
+      else{
+        link = `http://warm-inlet-55236.herokuapp.com/api/userCategories`
+      }
+      await fetch(link, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          "x-access-token": localStorage.getItem("token")
+        }
+      })
+        .then((response) => response.json())
+        .then(async (links) => {
+          console.log(links);
+          await this.$store.commit('getAllLinks', links);
+          this.setBtn();
+        });
+    }
   },
   watch:{
     $route (to, from){
@@ -69,8 +106,12 @@ export default {
   padding: 0;
 }
 
+html {
+    overflow-y: overlay;
+}
+
 #app {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -97,29 +138,6 @@ export default {
 
 .nav a.router-link-exact-active {
   color: #004e92;
-}
-
-header
-{
-    height: 9rem;
-    background: #000000;
-    color: whitesmoke;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    clip-path: ellipse(60% 100% at 50% 0);
-    flex-direction: column;
-}
-
-header > div:nth-child(1)
-{
-  margin: 1.5rem 3rem;
-}
-
-header > div:nth-child(1) > h1
-{
-  font-size: 3.5rem;
-  font-weight: bold;
 }
 
 .toggle
@@ -151,31 +169,23 @@ header > div:nth-child(1) > h1
     background-repeat: no-repeat;
 }
 
-.nav > div
+.nav > div:nth-child(1)
 {
-  min-width: 16rem;
   display: flex;
   flex-direction: column;
   border: 2px solid #ffffff;
   padding: 1rem 0; 
   border-radius: 2rem;
   position: relative;
+  align-items: center;
 }
 
-.nav > div > p
+.nav > div:nth-child(1) > p
 {
   font-size: 1.5rem;
-  margin: 0.5rem 0;
-  position: absolute;
+  margin-top: -2rem;
   background: #000000;
-  top: -1.5rem;
-  left: 3.8rem;
   padding: 0 0.5rem;
-}
-
-.nav > *
-{
-  margin: 1.5rem 0;
 }
 
 .nav
@@ -186,7 +196,7 @@ header > div:nth-child(1) > h1
     justify-content: center;
     align-items: center;
     transition: 0.5s;
-    padding: 40px;
+    padding: 0 40px;
     z-index: 1000;
     right: -100%;
     top: 0;
@@ -198,6 +208,103 @@ header > div:nth-child(1) > h1
 .nav.active
 {
     right: 0;
+}
+
+#logout
+{
+  width: 100%;
+  border-top: 2px solid #ffffff;
+  bottom: -10rem;
+  position: absolute;
+  height: 16rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  transition: 0.5s;
+}
+
+#logout.active
+{
+  bottom: 0;
+}
+
+#logout.active img
+{
+  transform: rotateZ(90deg);
+  filter: invert(12%) sepia(82%) saturate(470%) hue-rotate(352deg) brightness(98%) contrast(90%);
+}
+
+#logout img
+{
+  margin-top: 2rem;
+  filter: invert(12%) sepia(80%) saturate(6444%) hue-rotate(8deg) brightness(109%) contrast(124%);
+  height: 2rem;
+  transition: 0.3s;
+}
+
+#logout img:hover
+{
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+#logout > div
+{
+  height: 6rem;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 0;
+}
+
+#logout > *
+{
+  margin: 0 1.5rem;
+}
+
+#logout >div:nth-child(3)
+{
+  height: 10rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+}
+
+#logout > div:nth-child(3) p
+{
+  margin-top: 1rem;
+  font-size: 2.5rem;
+  color: red;
+  font-weight: bold;
+}
+
+#logout >div:nth-child(3) button
+{
+  background: none;
+  font-size: 1.5rem;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  width: 4rem;
+  margin: 0 1rem;
+  transition: 0.3s;
+}
+
+#logout >div:nth-child(3) button:hover
+{
+  transform: scale(1.2);
+  color: #31d331;
+  border-color: #31d331;
+  cursor: pointer;
+}
+
+
+#logout >div:nth-child(3) div
+{
+  margin-top: 1rem;
 }
 
 </style>

@@ -1,6 +1,9 @@
 <template>
-  <form id="deleteLinkForm" method="POST" @submit.prevent="use">
-    <h2>Modify or delete link</h2>
+  <form id="deleteLinkForm" method="POST" @submit.prevent="use" ref="delLink">
+    <div @click="toggleDelLinkForm">
+      <h2>Modify or delete link</h2>
+      <img src="../assets/img/dropDown.png" ref="btnDelLink">
+    </div>
     <label for="getName"
       >Choose the category, select the link which you want, and select if you
       want to delete or modify. If you want to modify, select the method and the
@@ -49,6 +52,7 @@
 
 <script>
 import { createToast } from "mosha-vue-toastify";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "formAdd",
@@ -62,15 +66,17 @@ export default {
       selectedLink: null,
       method: null,
       newCat: null,
+      userData: VueJwtDecode.decode(localStorage.getItem("token"))
     };
   },
   methods: {
     selectLink() {
-      fetch(`https://warm-inlet-55236.herokuapp.com/api/categories/${this.category}`, {
+      fetch(`http://localhost:3000/api/user/${this.userData.userId}/categories/${this.category}`, {
         method: "GET",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          "x-access-token": localStorage.getItem("token")
         },
       })
         .then((response) => response.json())
@@ -89,6 +95,10 @@ export default {
             this.toast("An error was occured", "danger")
             });
     },
+    toggleDelLinkForm(){
+      this.$refs.delLink.classList.toggle('active');
+      this.$refs.btnDelLink.classList.toggle('active');
+    },
     changeData() {
       let index = this.allLinks.find((l) => l._id === this.selectedLink);
       this.method = index.method;
@@ -104,11 +114,12 @@ export default {
         newCategory: this.newCat || null,
       };
       if ((this.method !== index.method || this.newLink !== index.link || this.category !== this.newCat && this.action === "PUT") || this.action === "DELETE") {
-        fetch(`https://warm-inlet-55236.herokuapp.com/api/links/${this.selectedLink}`, {
+        fetch(`http://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/links/${this.selectedLink}`, {
           method: this.action,
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            "x-access-token": localStorage.getItem("token")
           },
           body: JSON.stringify(data),
         })
@@ -177,11 +188,6 @@ export default {
 #deleteLinkForm > select {
   width: 65%;
   margin-bottom: 2rem;
-}
-
-#deleteLinkForm > div
-{
-  margin: 1.5rem 0;
 }
 
 </style>

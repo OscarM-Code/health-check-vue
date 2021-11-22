@@ -1,4 +1,11 @@
 <template>
+<section id="items">
+  <header>
+    <div>
+      <h1>Health Check</h1>
+      <p>Check health of your link</p>
+    </div>
+  </header>
   <div id="allCard">
     <loader
       v-if="loading"
@@ -14,11 +21,13 @@
     ></loader>
     <Card :allData="allData"></Card>
   </div>
+</section>
 </template>
 
 <script>
 import Card from "../components/Card.vue";
 import { createToast } from "mosha-vue-toastify";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "Items",
@@ -30,6 +39,7 @@ export default {
       name: "dataDiv",
       allData: [],
       loading: true,
+      userData: VueJwtDecode.decode(localStorage.getItem("token")),
     };
   },
   methods: {
@@ -39,51 +49,44 @@ export default {
         const customRoute = this.$route.params.item
           ? this.$route.params.item
           : null;
-        await fetch(`https://warm-inlet-55236.herokuapp.com/api/categories/${customRoute}`, {
+      await fetch(
+        `http://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/categories/${customRoute}`,
+        {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-          }
-        })
-          .then((response) => response.json())
-          .then((link) => {
-            this.loading = false;
-            link.sites.map((data) => {
-              const { link, method, health, statusCode } = data;
-              this.allData.push({ link: link, method: method, health: health, statusCode: statusCode });
+            "x-access-token": localStorage.getItem("token"),
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((link) => {
+          this.loading = false;
+          link.sites.map((data) => {
+            const { link, method, health, statusCode } = data;
+            this.allData.push({
+              link: link,
+              method: method,
+              health: health,
+              statusCode: statusCode,
             });
           });
-      }
-    },
-    async checkData() {
-      if (this.$route.params.item) {
-        const customRoute = this.$route.params.item
-          ? this.$route.params.item
-          : null;
-        await fetch(`https://warm-inlet-55236.herokuapp.com/api/categories/${customRoute}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          }
-        })
-          .then((response) => response.json())
-          .then((r) => {
-            this.toast(r.message ? r.message : r.message, "success")
-          }).catch((e) => {
-            this.toast("An error was occured.", "danger")
-            console.error(e);
-          });
+        });
       }
     },
   },
+  computed: {
+    storeCat() {
+      return this.$store.state.allLinks;
+    },
+  },
   async mounted() {
-    //await this.checkData();
-    this.loadData()
+    this.loadData();
     setInterval(() => {
       this.loading = true;
       setTimeout(async () => {
-        //await this.checkData();
-        this.loadData()}, 500);
+        this.loadData();
+      }, 500);
     }, 120000);
   },
   watch: {
@@ -91,7 +94,6 @@ export default {
       if (to && to.href && to.href !== "/options") {
         this.loading = true;
         setTimeout(async () => {
-          //await this.checkData();
           this.loadData();
         }, 1000);
       }
@@ -112,18 +114,34 @@ export default {
 </script>
 
 <style>
+#items header {
+  height: 9rem;
+  background: #000000;
+  color: whitesmoke;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  clip-path: ellipse(60% 100% at 50% 0);
+  flex-direction: column;
+}
 
-#allCard
-{
+#items header > div:nth-child(1) {
+  margin: 1.5rem 3rem;
+}
+
+#items header > div:nth-child(1) > h1 {
+  font-size: 3.5rem;
+  font-weight: bold;
+}
+
+#allCard {
   margin-top: 3rem;
   width: 100%;
 }
 
-#allCard > div
-{
+#allCard > div {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
 }
-
 </style>

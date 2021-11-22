@@ -1,6 +1,9 @@
 <template>
-  <form id="catDeleteForm" @submit.prevent="modDelCategory" method="POST">
-    <h2>Modify or delete category</h2>
+  <form id="catDeleteForm" @submit.prevent="modDelCategory" method="POST" ref="delCat">
+    <div @click="toggleCatDelForm">
+      <h2>Modify or delete category</h2>
+      <img src="../assets/img/dropDown.png" ref="btnDelCat">
+    </div>
     <label for="getName"
       >Choose the category and if you want to delete or modify.</label
     >
@@ -25,6 +28,7 @@
 
 <script>
 import { createToast } from "mosha-vue-toastify";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "formAdd",
@@ -34,6 +38,7 @@ export default {
       category: this.categories[0].id,
       action: "PUT",
       newName: this.categories[0].name,
+      userData: VueJwtDecode.decode(localStorage.getItem("token"))
     };
   },
   methods: {
@@ -41,11 +46,12 @@ export default {
       let data = {
         name: this.newName
       };
-      fetch(`https://warm-inlet-55236.herokuapp.com/api/categories/${this.category}`, {
+      fetch(`http://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/categories/${this.category}`, {
         method: this.action,
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          "x-access-token": localStorage.getItem("token")
         },
         body: JSON.stringify(data),
       })
@@ -71,6 +77,10 @@ export default {
         })
         .catch((e) => console.log(e));
     },
+    toggleCatDelForm(){
+      this.$refs.delCat.classList.toggle('active');
+      this.$refs.btnDelCat.classList.toggle('active');
+    }
   },
   setup() {
     const toast = (message, type) => {
@@ -113,11 +123,6 @@ export default {
 #catDeleteForm > select {
   width: 65%;
   margin-bottom: 2rem;
-}
-
-#catDeleteForm > div
-{
-  margin: 1.5rem 0;
 }
 
 </style>

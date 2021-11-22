@@ -12,6 +12,7 @@
     "mosha-vue-toastify": "^1.0.23",
     "vue": "^3.0.0",
     "vue-burger-menu": "^2.0.5",
+    "vue-jwt-decode": "^0.1.0",
     "vue-router": "^4.0.0-0",
     "vue-tree-nav": "^0.0.16",
     "vue-ui-preloader": "^1.2.1",
