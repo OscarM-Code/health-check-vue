@@ -29,7 +29,7 @@ export default {
       let data = {
         name: this.nameC,
       };
-      fetch("http://warm-inlet-55236.herokuapp.com/api/categories", {
+      fetch("https://warm-inlet-55236.herokuapp.com/api/categories", {
         method: "POST",
         headers: {
           Accept: "application/json",

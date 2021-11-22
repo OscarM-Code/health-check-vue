@@ -114,7 +114,7 @@ export default {
         newCategory: this.newCat || null,
       };
       if ((this.method !== index.method || this.newLink !== index.link || this.category !== this.newCat && this.action === "PUT") || this.action === "DELETE") {
-        fetch(`http://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/links/${this.selectedLink}`, {
+        fetch(`https://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/links/${this.selectedLink}`, {
           method: this.action,
           headers: {
             Accept: "application/json",

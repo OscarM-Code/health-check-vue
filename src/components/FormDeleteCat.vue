@@ -46,7 +46,7 @@ export default {
       let data = {
         name: this.newName
       };
-      fetch(`http://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/categories/${this.category}`, {
+      fetch(`https://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/categories/${this.category}`, {
         method: this.action,
         headers: {
           Accept: "application/json",

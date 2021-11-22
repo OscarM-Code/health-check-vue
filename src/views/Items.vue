@@ -50,7 +50,7 @@ export default {
           ? this.$route.params.item
           : null;
       await fetch(
-        `http://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/categories/${customRoute}`,
+        `https://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/categories/${customRoute}`,
         {
           method: "GET",
           headers: {

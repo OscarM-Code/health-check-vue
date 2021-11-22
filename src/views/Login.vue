@@ -27,7 +27,7 @@ export default {
     methods: {
         login() {
             if (this.mail && this.password) {
-                fetch('http://warm-inlet-55236.herokuapp.com/api/login', {
+                fetch('https://warm-inlet-55236.herokuapp.com/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

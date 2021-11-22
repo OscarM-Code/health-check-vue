@@ -32,7 +32,7 @@ export default {
     methods: {
         register() {
             if (this.firstName && this.lastName && this.mail && this.password) {
-                fetch('http://warm-inlet-55236.herokuapp.com/api/register', {
+                fetch('https://warm-inlet-55236.herokuapp.com/api/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
