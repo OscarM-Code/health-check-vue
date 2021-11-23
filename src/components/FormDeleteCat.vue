@@ -61,7 +61,7 @@ export default {
       let data = {
         name: this.newName
       };
-      if (this.newName !== this.categories.find((i) => i.id === this.category).name) {
+      if (this.newName !== this.categories.find((i) => i.id === this.category).name || this.action === "DELETE") {
         this.loading = true;
         fetch(`https://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/categories/${this.category}`, {
           method: this.action,
