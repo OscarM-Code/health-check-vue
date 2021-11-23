@@ -44,7 +44,7 @@ export default {
       };
       if (this.nameC) {
         this.loading = true
-        fetch("http://warm-inlet-55236.herokuapp.com/api/categories", {
+        fetch("https://warm-inlet-55236.herokuapp.com/api/categories", {
           method: "POST",
           headers: {
             Accept: "application/json",

@@ -63,7 +63,7 @@ export default {
       };
       if (this.newName !== this.categories.find((i) => i.id === this.category).name) {
         this.loading = true;
-        fetch(`http://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/categories/${this.category}`, {
+        fetch(`https://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/categories/${this.category}`, {
           method: this.action,
           headers: {
             Accept: "application/json",

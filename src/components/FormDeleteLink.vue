@@ -95,7 +95,7 @@ export default {
   methods: {
     selectLink() {
       fetch(
-        `http://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/categories/${this.category}`,
+        `https://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/categories/${this.category}`,
         {
           method: "GET",
           headers: {
@@ -148,7 +148,7 @@ export default {
       ) {
         this.loading = true;
         fetch(
-          `http://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/links/${this.selectedLink}`,
+          `https://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/links/${this.selectedLink}`,
           {
             method: this.action,
             headers: {
