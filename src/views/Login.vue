@@ -30,7 +30,8 @@ export default {
                 fetch('https://warm-inlet-55236.herokuapp.com/api/login', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
                     },
                     body: JSON.stringify({
                         email: this.mail,

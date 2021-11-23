@@ -35,7 +35,8 @@ export default {
                 fetch('https://warm-inlet-55236.herokuapp.com/api/register', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
                     },
                     body: JSON.stringify({
                         first_name: this.firstName,
