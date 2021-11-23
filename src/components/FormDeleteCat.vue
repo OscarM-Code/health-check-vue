@@ -1,12 +1,24 @@
 <template>
   <form id="catDeleteForm" @submit.prevent="modDelCategory" method="POST" ref="delCat">
+        <loader
+      v-if="loading"
+      object="#ffffff"
+      color1="#77c207"
+      color2="#2c2c2c"
+      size="11"
+      speed="1.5"
+      bg="#343a40"
+      objectbg="#999793"
+      opacity="80"
+      name="circular"
+    ></loader>
     <div @click="toggleCatDelForm">
       <h2>Modify or delete category</h2>
       <img src="../assets/img/dropDown.png" ref="btnDelCat">
     </div>
-    <label for="getName"
-      >Choose the category and if you want to delete or modify.</label
-    >
+    <section>
+    <div>
+    <label for="getName">Choose the category and if you want to delete or modify.</label>
     <div>
       <label for="category">Category:</label>
       <select name="category" v-model="category" @change="newName = this.categories.find((i) => i.id === category).name">
@@ -22,7 +34,9 @@
     </div>
     <label v-if="action === 'PUT'">Change name here:</label>
     <input v-if="action === 'PUT'" type="text" v-model="newName" />
+    </div>
     <button>Validate</button>
+    </section>
   </form>
 </template>
 
@@ -38,7 +52,8 @@ export default {
       category: this.categories[0].id,
       action: "PUT",
       newName: this.categories[0].name,
-      userData: VueJwtDecode.decode(localStorage.getItem("token"))
+      userData: VueJwtDecode.decode(localStorage.getItem("token")),
+      loading: false
     };
   },
   methods: {
@@ -46,36 +61,46 @@ export default {
       let data = {
         name: this.newName
       };
-      fetch(`https://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/categories/${this.category}`, {
-        method: this.action,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "x-access-token": localStorage.getItem("token")
-        },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then(async (r) => {      
-          if(this.action === "DELETE"){
-            if(r.message === "Category deleted."){
-              this.$store.commit("deleteAllLinks", this.category);
-              this.toast(r.message, "success");
-              this.category = "618511ce4efdc576ee585e52";
-              }else{
-                this.toast(r.message, "danger")
-              }
-          } else if(this.action === "PUT"){
-            if(r.message === "Category name modified."){
-                this.$store.commit("modifyAllLinks", {cat: this.category, name: this.newName});
-                this.toast(r.message, "success")
-              }else{
-                this.toast(r.message, "danger")
-              }
-          }
-
+      if (this.newName !== this.categories.find((i) => i.id === this.category).name) {
+        this.loading = true;
+        fetch(`http://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/categories/${this.category}`, {
+          method: this.action,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "x-access-token": localStorage.getItem("token")
+          },
+          body: JSON.stringify(data),
         })
-        .catch((e) => console.log(e));
+          .then((response) => response.json())
+          .then(async (r) => {      
+            this.loading = false
+            if(this.action === "DELETE"){
+              if(r.message === "Category deleted."){
+                this.$store.commit("deleteAllLinks", this.category);
+                this.toast(r.message, "success");
+                this.category = "618511ce4efdc576ee585e52";
+                }else{
+                  this.toast(r.message, "danger")
+                }
+            } else if(this.action === "PUT"){
+              if(r.message === "Category name modified."){
+                  this.$store.commit("modifyAllLinks", {cat: this.category, name: this.newName});
+                  this.toast(r.message, "success")
+                }else{
+                  this.toast(r.message, "danger")
+                }
+            }
+  
+          })
+          .catch((e) => {
+            console.log(e)
+            this.loading = false;
+            this.toast("An error was occured.", "danger")
+            });
+      } else {
+        this.toast("Both names is same !", "danger")
+      }
     },
     toggleCatDelForm(){
       this.$refs.delCat.classList.toggle('active');
@@ -102,27 +127,46 @@ export default {
 <style>
 
 #catDeleteForm input {
-  margin-top: 0 !important;
   width: 60%;
-}
-
-#catDeleteForm div select {
-  font-size: 1.5rem;
-  width: 8rem;
-  margin: auto 1rem;
-}
-
-#catDeleteForm div > label {
-  font-size: 1.5rem;
 }
 
 #catDeleteForm button {
   padding: 0 1rem;
+  height: 3rem;
 }
 
-#catDeleteForm > select {
-  width: 65%;
-  margin-bottom: 2rem;
+#catDeleteForm > section
+{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  align-items: flex-end;
+}
+
+#catDeleteForm > section > div
+{
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+#catDeleteForm > section > div > div
+{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#catDeleteForm > section > *,
+#catDeleteForm > div > *
+{
+  margin: 2rem;
+}
+
+#catDeleteForm > section div > label
+{
+  margin-top: 2rem;
 }
 
 </style>

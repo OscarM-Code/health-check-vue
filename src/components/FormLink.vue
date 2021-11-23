@@ -1,5 +1,17 @@
 <template>
   <form id="linkForm" @submit.prevent="addLink" method="POST" ref="addLink">
+    <loader
+      v-if="loading"
+      object="#ffffff"
+      color1="#77c207"
+      color2="#2c2c2c"
+      size="11"
+      speed="1.5"
+      bg="#343a40"
+      objectbg="#999793"
+      opacity="80"
+      name="circular"
+    ></loader>
     <div @click="toggleLinkForm">
       <h2>Add Link<link rel="stylesheet" href="" /></h2>
       <img src="../assets/img/dropDown.png" ref="btnAddLink">
@@ -40,10 +52,12 @@ export default {
       link: null,
       method: "GET",
       category: this.categories[0].id,
+      loading: false
     };
   },
   methods: {
     addLink() {
+      this.loading = true;
       let data = {
         link: this.link,
         method: this.method,
@@ -51,7 +65,7 @@ export default {
         health: true,
         category: this.category,
       };
-      fetch("https://warm-inlet-55236.herokuapp.com/api/links", {
+      fetch("http://warm-inlet-55236.herokuapp.com/api/links", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -63,8 +77,13 @@ export default {
         .then((response) => response.json())
         .then((r) => {
             this.toast("Link added.", "success");
+            this.loading = false,
+            setTimeout(() => {
+              window.location.reload()
+            }, 3000)
         })
         .catch((e) => {
+          this.loading = false;
           this.toast("An error was occured", "danger");
           console.log(e)
           });
@@ -100,6 +119,7 @@ export default {
 {
     flex-wrap: wrap;
     justify-content: space-between;
+    align-items: flex-end;
 }
 
 #linkForm > div > *

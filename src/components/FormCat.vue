@@ -1,5 +1,17 @@
 <template>
   <form ref="addCat" id="categoryForm" @submit.prevent="addCategory" method="POST">
+        <loader
+      v-if="loading"
+      object="#ffffff"
+      color1="#77c207"
+      color2="#2c2c2c"
+      size="11"
+      speed="1.5"
+      bg="#343a40"
+      objectbg="#999793"
+      opacity="80"
+      name="circular"
+    ></loader>
     <div @click="toggleCatForm">
       <h2>Add category</h2>
       <img src="../assets/img/dropDown.png" ref="btnAddCat">
@@ -21,7 +33,8 @@ export default {
   name: "formAdd",
   data() {
     return {
-      nameC: null
+      nameC: null,
+      loading: false
     };
   },
   methods: {
@@ -29,21 +42,30 @@ export default {
       let data = {
         name: this.nameC,
       };
-      fetch("https://warm-inlet-55236.herokuapp.com/api/categories", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "x-access-token": localStorage.getItem("token")
-        },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then(async (r) => {
-            this.$store.commit("incrementAllLinks", r);
-            this.toast("Category Create.", "success");
+      if (this.nameC) {
+        this.loading = true
+        fetch("http://warm-inlet-55236.herokuapp.com/api/categories", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "x-access-token": localStorage.getItem("token")
+          },
+          body: JSON.stringify(data),
         })
-        .catch((e) => this.toast("An error was occured.", "danger"));
+          .then((response) => response.json())
+          .then(async (r) => {
+              this.$store.commit("incrementAllLinks", r);
+              this.loading = false
+              this.toast("Category Create.", "success");
+          })
+          .catch((e) => {
+            this.toast("An error was occured.", "danger")
+            this.loading = false
+            });
+      } else {
+        this.toast("Name is blank", "warning")
+      }
     },
     toggleCatForm(){
       this.$refs.addCat.classList.toggle('active');
@@ -81,7 +103,7 @@ export default {
 #categoryForm > div:nth-child(2)
 {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   width: 100%;
   justify-content: space-between;
 }

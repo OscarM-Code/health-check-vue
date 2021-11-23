@@ -1,10 +1,10 @@
 <template>
     <div ref="nav" class="nav" v-if="userData">
+      <router-link to="/options" @click="toggleMenu">Options</router-link>
       <div>
         <p>Categories:</p>
         <router-link v-for="link in links" :key="link" :to="'/items/' + link.id" @click="toggleMenu"> {{ link.name[0].toUpperCase() + link.name.slice(1) }} </router-link>
         </div>
-      <router-link to="/options" @click="toggleMenu">Options</router-link>
       <div id="logout" ref="logout">
         <div>
           <p>User:</p>
@@ -68,10 +68,10 @@ export default {
       let userData = await VueJwtDecode.decode(localStorage.getItem("token"));
       let link;
       if(userData.role === "ROLE_ADMIN"){
-        link = `https://warm-inlet-55236.herokuapp.com/api/categories`
+        link = `http://warm-inlet-55236.herokuapp.com/api/categories`
       }
       else{
-        link = `https://warm-inlet-55236.herokuapp.com/api/userCategories`
+        link = `http://warm-inlet-55236.herokuapp.com/api/userCategories`
       }
       await fetch(link, {
         method: 'GET',
@@ -82,9 +82,14 @@ export default {
       })
         .then((response) => response.json())
         .then(async (links) => {
-          console.log(links);
           await this.$store.commit('getAllLinks', links);
           this.setBtn();
+          if (links.status && (r.status === 401 || links.status === 403)) {
+            this.logout();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
         });
     }
   },
@@ -129,7 +134,15 @@ html {
   color: #ffffff;
   text-decoration: none;
   transition: 0.3s;
-  margin: 0.5rem 1rem;
+}
+
+.nav a:nth-child(1)
+{
+  margin: 10rem 0 1rem 0;
+  border-bottom: 4px solid #ffffff;
+  padding-bottom: 1rem;
+  width: 100%;
+  text-align: end;
 }
 
 .nav a:hover {
@@ -137,7 +150,16 @@ html {
 }
 
 .nav a.router-link-exact-active {
-  color: #004e92;
+    color: transparent;
+    background: #833ab4;
+    background: -webkit-linear-gradient(to right, #fddd27, #1dbefd, #b852fc);
+    background: linear-gradient(to right, #fddd27, #1dbefd, #b852fc);
+    background-clip: text;
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    border-image: linear-gradient(to right, #fddd27, #1dbefd, #b852fc) 1;
+    border-image: -webkit-linear-gradient(to right, #fddd27, #1dbefd, #b852fc) 1;
 }
 
 .toggle
@@ -169,23 +191,33 @@ html {
     background-repeat: no-repeat;
 }
 
-.nav > div:nth-child(1)
+.nav > div:nth-child(2)
 {
   display: flex;
   flex-direction: column;
-  border: 2px solid #ffffff;
-  padding: 1rem 0; 
   border-radius: 2rem;
   position: relative;
-  align-items: center;
+  align-items: flex-end;
+  width: 100%;
 }
 
-.nav > div:nth-child(1) > p
+.nav > div:nth-child(2) > p
 {
   font-size: 1.5rem;
-  margin-top: -2rem;
-  background: #000000;
-  padding: 0 0.5rem;
+}
+
+.nav > div:nth-child(2) > *
+{
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #ffffff;
+  width: 100%;
+  text-align: end;
+}
+
+.nav > div:nth-child(2) > a:last-child
+{
+  border-bottom-width: 4px;
 }
 
 .nav
@@ -193,8 +225,8 @@ html {
     position: fixed;
     background: #000;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-end;
     transition: 0.5s;
     padding: 0 40px;
     z-index: 1000;
@@ -222,6 +254,7 @@ html {
   align-items: flex-start;
   flex-wrap: wrap;
   transition: 0.5s;
+  left: 0;
 }
 
 #logout.active
@@ -306,5 +339,114 @@ html {
 {
   margin-top: 1rem;
 }
+
+@media only screen and (max-width : 400px) and (orientation: portrait) {
+
+  .nav
+  {
+    width: 100vw;
+    padding: 0;
+  }
+
+  .nav a:nth-child(1)
+  {
+    margin-top: 5rem;
+  }
+
+  .nav a, .nav div:nth-child(2) p
+  {
+    margin-right: 5% !important;
+    width: 90% !important;
+  }
+
+  .nav > div:nth-child(2)
+  {
+    overflow: scroll;
+    margin-bottom: 6rem;
+  }
+
+  #logout
+  {
+    background: #000;
+    z-index: 9999;
+  }
+
+  .toggle
+  {
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+}
+
+@media only screen and (max-width : 300px){
+
+    .nav
+  {
+    width: 100vw;
+    padding: 0;
+  }
+
+  .nav a:nth-child(1)
+  {
+    margin-top: 5rem;
+  }
+
+  .nav a, .nav div:nth-child(2) p
+  {
+    margin-right: 5% !important;
+    width: 90% !important;
+  }
+
+  .nav > div:nth-child(2)
+  {
+    overflow: scroll;
+    margin-bottom: 6rem;
+  }
+
+  #logout
+  {
+    background: #000;
+    z-index: 9999;
+  }
+
+}
+
+@media only screen and (max-width : 900px) and (orientation: landscape) {
+
+  .nav
+  {
+    width: 100%;
+    height: 100vh;
+    right: -100%;
+    padding: 0;
+  }
+
+  .nav a:nth-child(1)
+  {
+    margin-top: 5rem;
+  }
+
+  .nav a, .nav div:nth-child(2) p
+  {
+    margin-right: 5% !important;
+    width: 90% !important;
+  }
+
+  .nav > div:nth-child(2)
+  {
+    overflow: scroll;
+    margin-bottom: 6rem;
+  }
+
+  #logout
+  {
+    background: #000;
+    z-index: 9999;
+    bottom: -10rem;
+    width: 100vw;
+  }
+
+}
+
 
 </style>

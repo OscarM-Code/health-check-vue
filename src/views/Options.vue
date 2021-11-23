@@ -133,14 +133,14 @@ export default {
   justify-content: space-between;
 }
 
-#formDiv form:nth-child(4)
+#formDiv form:last-child
 {
   border-bottom: none;
 }
 
 #formDiv form.active
 {
-  max-height: 50rem;
+  max-height: 100rem;
   transition: 0.5s !important;
 }
 
@@ -197,14 +197,12 @@ export default {
   border-radius: 2rem;
   color: #ffffff;
   text-align: center;
-  transition: 0.7s;
+  transition: 0.4s;
   font-size: 2rem;
   margin-bottom: 2rem;
 }
 
 #formDiv form button:hover {
-  background: #000;
-  color: #000000;
   transform: scale(1.2);
   cursor: pointer;
 }
@@ -238,4 +236,174 @@ export default {
   background: none;
   color: #000000;
 }
+
+#overlay-circular
+{
+  margin: 0;
+}
+
+@media only screen and (max-width : 400px) and (orientation: portrait) {
+
+  #options
+  {
+    width: 100vw;
+  }
+
+  #formDiv
+  {
+    width: 95%;
+  }
+
+  #options header > div
+  {
+    margin: 0.5rem 0.5rem;
+  }
+
+  #options header
+  {
+    height: 40vh;
+  }
+
+  #formDiv form h2
+  {
+    font-size: 1.1rem;
+    margin: auto 0.5rem;
+  }
+
+  #formDiv form div:nth-child(1)
+  {
+    align-items: center;
+  }
+
+  #formDiv form label,
+  #formDiv form input,
+  #formDiv form select,
+  #formDiv form button
+  {
+    font-size: 1rem !important;
+  }
+
+  #formDiv form > div:nth-child(2) > *,
+  #formDiv form > section:nth-child(2) > *
+  {
+    margin: 0.5rem;
+  }
+
+  #formDiv form button
+  {
+    height: 2rem;
+    width: 5rem;
+  }
+
+  #formDiv form > div:nth-child(2) > div:nth-child(1n+1),
+  #formDiv form > section:nth-child(2) > div:nth-child(1n+1)
+  {
+    align-items: flex-start;
+    width: 60%;
+  }
+
+  #formDiv form input
+  {
+    width: 100%;
+  }
+
+}
+
+@media only screen and (max-width : 900px) and (orientation: landscape) {
+
+  #options
+  {
+    width: 100vw;
+  }
+
+  #options h1
+  {
+    font-size: 3rem !important;
+  }
+
+  #formDiv
+  {
+    width: 95%;
+  }
+
+  #options header > div
+  {
+    margin: 0.5rem 0.5rem;
+  }
+
+  #options header
+  {
+    height: 40vh;
+  }
+
+  #formDiv form h2
+  {
+    font-size: 1.1rem;
+    margin: auto 0.5rem;
+  }
+
+  #formDiv form div:nth-child(1)
+  {
+    align-items: center;
+  }
+
+  #formDiv form label,
+  #formDiv form input,
+  #formDiv form select,
+  #formDiv form button
+  {
+    font-size: 1rem !important;
+  }
+
+  #formDiv form > div:nth-child(2) > *,
+  #formDiv form > section:nth-child(2) > *
+  {
+    margin: 0.5rem;
+  }
+
+  #formDiv form button
+  {
+    height: 2rem;
+    width: 5rem;
+  }
+
+  #formDiv form > div:nth-child(2) > div:nth-child(1n+1),
+  #formDiv form > section:nth-child(2) > div:nth-child(1n+1)
+  {
+    align-items: flex-start;
+    width: 60%;
+  }
+
+  #formDiv form input
+  {
+    width: 100%;
+  }
+
+}
+
+@media (min-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+
+  #formDiv
+  {
+    width: 95%;
+  }
+
+  #formDiv form > div:nth-child(2) > div:nth-child(1n+1),
+  #formDiv form > section:nth-child(2) > div:nth-child(1n+1)
+  {
+    align-items: flex-start;
+    width: 60%;
+  }
+
+}
+
+@media (max-device-width: 1024px) and (orientation: landscape) {
+
+  #formDiv
+  {
+    width: 95%;
+  }
+
+}
+
 </style>

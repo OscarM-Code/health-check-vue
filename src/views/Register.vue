@@ -32,7 +32,7 @@ export default {
     methods: {
         register() {
             if (this.firstName && this.lastName && this.mail && this.password) {
-                fetch('https://warm-inlet-55236.herokuapp.com/api/register', {
+                fetch('http://warm-inlet-55236.herokuapp.com/api/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -156,6 +156,80 @@ export default {
 #register #form > form > button:hover
 {
     transform: scale(1.1);
+}
+
+@media only screen and (max-width : 420px) and (orientation: portrait) {
+
+    #register #form
+    {
+        width: 100%;
+    }
+
+    #register #form > form
+    {
+        margin-top: 1rem;
+    }
+
+    #register #form h1
+    {
+        margin-top: 4rem;
+    }
+
+}
+
+@media only screen and (max-width : 900px) and (orientation: landscape) {
+
+    #register #form
+    {
+        width: 70%;
+    }
+
+    #register #form > form
+    {
+        margin-top: 1rem;
+    }
+
+    #register #form h1
+    {
+        margin-top: 4rem;
+    }
+
+    #register {
+    background-size: 100% auto;
+    height: auto;
+    width: 100%;
+    }
+
+}
+
+@media (min-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+    #register #form
+    {
+        width: 70%;
+    }
+
+    #register {
+    background-size: cover;
+    background-position: left 45% bottom;
+    }
+}
+
+@media (width: 1024px) and (orientation: landscape) {
+    #register #form
+    {
+        width: 50%;
+    }
+
+    #register #form > form
+    {
+        margin-top: 1rem;
+    }
+
+    #register #form h1
+    {
+        margin-top: 4rem;
+    }
+
 }
 
 </style>

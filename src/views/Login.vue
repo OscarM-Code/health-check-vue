@@ -6,7 +6,7 @@
                 <label for="email">Email</label>
                 <input type="email" id="email" placeholder="Enter your mail address here." v-model="mail">
                 <label for="password">Password</label>
-                <input type="password" id="password" minlength="8" maxlength="15" placeholder="Password (8-15 characters)" v-model="password">
+                <input type="password" id="password" placeholder="Password (8-15 characters)" v-model="password">
                 <button>Login</button>
             </form>
         </div>
@@ -27,7 +27,7 @@ export default {
     methods: {
         login() {
             if (this.mail && this.password) {
-                fetch('https://warm-inlet-55236.herokuapp.com/api/login', {
+                fetch('http://warm-inlet-55236.herokuapp.com/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -155,6 +155,80 @@ export default {
 #login #form > form > button:hover
 {
     transform: scale(1.1);
+}
+
+@media only screen and (max-width : 420px) and (orientation: portrait) {
+
+    #login #form
+    {
+        width: 100%;
+    }
+
+    #login #form > form
+    {
+        margin-top: 1rem;
+    }
+
+    #login #form h1
+    {
+        margin-top: 4rem;
+    }
+
+}
+
+@media only screen and (max-width : 900px) and (orientation: landscape) {
+
+    #login #form
+    {
+        width: 70%;
+    }
+
+    #login #form > form
+    {
+        margin-top: 1rem;
+    }
+
+    #login #form h1
+    {
+        margin-top: 4rem;
+    }
+
+    #login {
+    background-size: 100% auto;
+    height: auto;
+    width: 100%;
+    }
+
+}
+
+@media (min-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+    #login #form
+    {
+        width: 70%;
+    }
+
+    #login {
+    background-size: cover;
+    background-position: left 45% bottom;
+    }
+}
+
+@media (width: 1024px) and (orientation: landscape) {
+    #login #form
+    {
+        width: 50%;
+    }
+
+    #login #form > form
+    {
+        margin-top: 1rem;
+    }
+
+    #login #form h1
+    {
+        margin-top: 4rem;
+    }
+
 }
 
 </style>

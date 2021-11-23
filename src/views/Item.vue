@@ -18,11 +18,11 @@ export default {
     name: 'Item',
     computed: {
         allData() {
-            return this.$store.state.allData;
+            return this.$store.state.allLinks;
         }
     },
     mounted() {
-        if (!this.allData) {
+        if (!this.allData || this.allData.length === 0) {
             this.$router.push('/options');
         } else {
             this.$router.push(`/items/${this.allData}`);
