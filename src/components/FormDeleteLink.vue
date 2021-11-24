@@ -1,5 +1,5 @@
 <template>
-  <form id="deleteLinkForm" method="POST" @submit.prevent="use" ref="delLink" v-if="allLinks.length !== 0">
+  <form id="deleteLinkForm" method="POST" @submit.prevent="use" ref="delLink">
         <loader
       class="loader"
       v-if="loading"
@@ -170,9 +170,6 @@ export default {
             } else {
               this.toast("An error was occured", "danger");
             }
-            setTimeout(() => {
-              window.location.reload();
-            }, 3000)
           })
           .catch((e) => {
             console.log(e);

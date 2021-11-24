@@ -83,9 +83,6 @@ export default {
           } else if (r.status && r.status === 200) {
             this.toast("Link added.", "success");
             this.loading = false;
-            setTimeout(() => {
-              window.location.reload()
-            }, 3000)
           } else {
             this.loading = false;
             this.toast("Something went wrong.", "danger");
