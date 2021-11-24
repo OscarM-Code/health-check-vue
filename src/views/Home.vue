@@ -45,7 +45,7 @@ export default {
     font-size: 2rem;
     text-decoration: none;
     border: 2px solid #fff;
-    width: 10rem;
+    width: 12rem;
     background: none;
     padding: 0.7rem 0; 
     transition: 0.3s;
@@ -62,7 +62,6 @@ export default {
     background-position: center;
     background-repeat: no-repeat;
     -webkit-background-clip: text;
-    background-size: 70% 70%;
     border: 2px solid;
     border-image: linear-gradient(to right, #fddd27, #1dbefd, #b852fc) 1;
     border-image: -webkit-linear-gradient(to right, #fddd27, #1dbefd, #b852fc) 1;

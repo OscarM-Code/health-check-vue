@@ -12,7 +12,7 @@
         </div>
         <img src="./assets/img/logout.png" @click="toggleLogout">
         <div>
-          <p>Logout ?</p>
+          <p>Se déconnecter ?</p>
           <div>
             <button @click="logoutReturn">Oui</button>
             <button @click="toggleLogout">Non</button>
@@ -322,7 +322,7 @@ html {
 #logout > div:nth-child(3) p
 {
   margin-top: 1rem;
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: red;
   font-weight: bold;
 }

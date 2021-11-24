@@ -14,13 +14,13 @@
       name="circular"
     ></loader>
     <div @click="toggleLinkForm">
-      <h2>Add Link<link rel="stylesheet" href="" /></h2>
+      <h2>Ajouter un lien<link rel="stylesheet" href="" /></h2>
       <img src="../assets/img/dropDown.png" ref="btnAddLink">
     </div>
     <div>
     <div>
       <label for="getLink">Entrez le lien et la méthode que vous voulez ajouter.</label>
-      <input type="text" id="getLink" placeholder="Link here" v-model="link" />
+      <input type="text" id="getLink" placeholder="Lien ici" v-model="link" />
     </div>
     <div>
       <label for="methid">Méthode:</label>
