@@ -237,9 +237,11 @@ export default {
   color: #000000;
 }
 
-#overlay-circular
+.loader
 {
   margin: 0;
+  width: 100vw;
+  height: 100vh;
 }
 
 @media only screen and (max-width : 400px) and (orientation: portrait) {

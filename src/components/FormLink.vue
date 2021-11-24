@@ -1,6 +1,7 @@
 <template>
   <form id="linkForm" @submit.prevent="addLink" method="POST" ref="addLink">
     <loader
+      class="loader"
       v-if="loading"
       object="#ffffff"
       color1="#77c207"
@@ -76,11 +77,19 @@ export default {
       })
         .then((response) => response.json())
         .then((r) => {
+          if(r.status && r.status === 400) {
+            this.loading = false;
+            this.toast(r.message, "warning");
+          } else if (r.status && r.status === 200) {
             this.toast("Link added.", "success");
-            this.loading = false,
+            this.loading = false;
             setTimeout(() => {
               window.location.reload()
             }, 3000)
+          } else {
+            this.loading = false;
+            this.toast("Something went wrong.", "danger");
+          }
         })
         .catch((e) => {
           this.loading = false;

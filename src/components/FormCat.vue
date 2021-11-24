@@ -1,6 +1,7 @@
 <template>
   <form ref="addCat" id="categoryForm" @submit.prevent="addCategory" method="POST">
         <loader
+      class="loader"
       v-if="loading"
       object="#ffffff"
       color1="#77c207"
@@ -55,9 +56,17 @@ export default {
         })
           .then((response) => response.json())
           .then(async (r) => {
-              this.$store.commit("incrementAllLinks", r);
+            if (r.status && r.status === 400) {
+              this.toast(r.message, "warning");
               this.loading = false
+            }else if (r.status && r.status === 200) {
+              this.$store.commit("incrementAllLinks", r.cat);
               this.toast("Category Create.", "success");
+              this.loading = false
+            } else {
+              this.toast("Something went wrong.", "error");
+              this.loading = false
+            }
           })
           .catch((e) => {
             this.toast("An error was occured.", "danger")

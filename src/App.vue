@@ -82,11 +82,11 @@ export default {
       })
         .then((response) => response.json())
         .then(async (links) => {
-          await this.$store.commit('getAllLinks', links);
-          this.setBtn();
           if (links.status && (r.status === 401 || links.status === 403)) {
             this.logout();
           }
+          await this.$store.commit('getAllLinks', links);
+          this.setBtn();
         })
         .catch((error) => {
           console.log(error);

@@ -1,6 +1,7 @@
 <template>
   <form id="deleteLinkForm" method="POST" @submit.prevent="use" ref="delLink" v-if="allLinks.length !== 0">
         <loader
+      class="loader"
       v-if="loading"
       object="#ffffff"
       color1="#77c207"

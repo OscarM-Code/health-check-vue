@@ -1,6 +1,7 @@
 <template>
   <form id="catDeleteForm" @submit.prevent="modDelCategory" method="POST" ref="delCat">
         <loader
+      class="loader"
       v-if="loading"
       object="#ffffff"
       color1="#77c207"
