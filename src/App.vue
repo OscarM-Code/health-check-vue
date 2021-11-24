@@ -146,7 +146,7 @@ html {
 }
 
 .nav a:hover {
-  transform: scale(1.1);
+  transform: scale(1.1) translateX(-1rem);
 }
 
 .nav a.router-link-exact-active {
@@ -193,26 +193,35 @@ html {
 
 .nav > div:nth-child(2)
 {
-  overflow: scroll;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   border-radius: 2rem;
   position: relative;
   align-items: flex-end;
   width: 100%;
+  overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.nav > div:nth-child(2)::-webkit-scrollbar {
+  display: none;
 }
 
 .nav > div:nth-child(2) > p
 {
   font-size: 1.5rem;
+  width: auto;
 }
 
 .nav > div:nth-child(2) > *
 {
+  margin-right: 3%;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid #ffffff;
-  width: 100%;
+  width: 97%;
   text-align: end;
 }
 
