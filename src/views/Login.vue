@@ -9,6 +9,7 @@
                 <input type="password" id="password" placeholder="Password (8-15 characters)" v-model="password">
                 <button>Login</button>
             </form>
+            <p>Or create account: <a href="/register">Register</a></p>
         </div>
     </div>
 </template>
@@ -156,6 +157,14 @@ export default {
 #login #form > form > button:hover
 {
     transform: scale(1.1);
+}
+
+#form > p
+{
+    font-size: 1.2rem;
+    color: #000000;
+    text-shadow: none;
+    margin-top: 1rem;
 }
 
 @media only screen and (max-width : 420px) and (orientation: portrait) {
