@@ -3,9 +3,9 @@
         <h1>Health-Check</h1>
         <p>Check health of your request for a link.</p>
         <div id="btn-div">
-            <a href="/login" class="btn">Login</a>
-            or
-            <a href="/register" class="btn">Register</a>
+            <a href="/login" class="btn">Se connecter</a>
+            ou
+            <a href="/register" class="btn">S'enregistrer</a>
         </div>
     </div>
 </template>

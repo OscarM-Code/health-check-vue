@@ -19,25 +19,25 @@
     </div>
     <div>
     <div>
-      <label for="getLink">Enter the link and the method that you want to add.</label>
+      <label for="getLink">Entrez le lien et la méthode que vous voulez ajouter.</label>
       <input type="text" id="getLink" placeholder="Link here" v-model="link" />
     </div>
     <div>
-      <label for="methid">Method:</label>
+      <label for="methid">Méthode:</label>
       <select name="method" v-model="method">
         <option value="GET">GET</option>
         <option value="POST">POST</option>
         <option value="DELETE">DELETE</option>
         <option value="PUT">PUT</option>
       </select>
-      <label for="category">Category:</label>
+      <label for="category">Categorie:</label>
       <select name="category" v-model="category">
         <option v-for="list in this.categories" :key="list" :value="list.id">{{
           list.name[0].toUpperCase() + list.name.slice(1)
         }}</option>
       </select>
     </div>
-    <button>Add +</button>
+    <button>ajouter</button>
     </div>
   </form>
 </template>
@@ -81,16 +81,16 @@ export default {
             this.loading = false;
             this.toast(r.message, "warning");
           } else if (r.status && r.status === 200) {
-            this.toast("Link added.", "success");
+            this.toast("Lien ajouté", "success");
             this.loading = false;
           } else {
             this.loading = false;
-            this.toast("Something went wrong.", "danger");
+            this.toast("Une erreur est survenue.", "danger");
           }
         })
         .catch((e) => {
           this.loading = false;
-          this.toast("An error was occured", "danger");
+          this.toast("Une erreur est survenue.", "danger");
           console.log(e)
           });
     },

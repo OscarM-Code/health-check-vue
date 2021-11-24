@@ -1,15 +1,15 @@
 <template>
     <div id="login">
         <div id="form">
-            <h1>Login Information</h1>
+            <h1>Information de connection</h1>
             <form @submit.prevent="login">
                 <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Enter your mail address here." v-model="mail">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Password (8-15 characters)" v-model="password">
+                <input type="email" id="email" placeholder="Entrer votre Email ici." v-model="mail">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" placeholder="Mot de passe" v-model="password">
                 <button>Login</button>
             </form>
-            <p>Or create account: <a href="/register">Register</a></p>
+            <p>Ou créer un compte: <a href="/register">S'enregistrer</a></p>
         </div>
     </div>
 </template>

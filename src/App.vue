@@ -7,15 +7,15 @@
         </div>
       <div id="logout" ref="logout">
         <div>
-          <p>User:</p>
+          <p>Utilisateur:</p>
           <h2>{{ userData.first_name + " " + userData.last_name }}</h2>
         </div>
         <img src="./assets/img/logout.png" @click="toggleLogout">
         <div>
           <p>Logout ?</p>
           <div>
-            <button @click="logoutReturn">Yes</button>
-            <button @click="toggleLogout">No</button>
+            <button @click="logoutReturn">Oui</button>
+            <button @click="toggleLogout">Non</button>
           </div>
         </div>
       </div>

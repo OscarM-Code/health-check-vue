@@ -14,14 +14,14 @@
       name="circular"
     ></loader>
     <div @click="toggleCatDelForm">
-      <h2>Modify or delete category</h2>
+      <h2>Modifier ou supprimer une catégorie</h2>
       <img src="../assets/img/dropDown.png" ref="btnDelCat">
     </div>
     <section>
     <div>
-    <label for="getName">Choose the category and if you want to delete or modify.</label>
+    <label for="getName">Choisissez une catégorie et l'action à effectuer.</label>
     <div>
-      <label for="category">Category:</label>
+      <label for="category">Categorie:</label>
       <select name="category" v-model="category" @change="newName = this.categories.find((i) => i.id === category).name">
       <option v-for="list in this.categories" :key="list" :value="list.id">{{
         list.name[0].toUpperCase() + list.name.slice(1)
@@ -29,14 +29,14 @@
     </select>
       <label for="delormod">Action:</label>
       <select name="delormod" v-model="action">
-        <option value="PUT">Modify</option>
-        <option value="DELETE">Delete</option>
+        <option value="PUT">Modifier</option>
+        <option value="DELETE">Supprimer</option>
       </select>
     </div>
-    <label v-if="action === 'PUT'">Change name here:</label>
+    <label v-if="action === 'PUT'">Changez le nom ici:</label>
     <input v-if="action === 'PUT'" type="text" v-model="newName" />
     </div>
-    <button>Validate</button>
+    <button>Valider</button>
     </section>
   </form>
 </template>
@@ -97,10 +97,10 @@ export default {
           .catch((e) => {
             console.log(e)
             this.loading = false;
-            this.toast("An error was occured.", "danger")
+            this.toast("Une erreur est survenue.", "danger")
             });
       } else {
-        this.toast("Both names is same !", "danger")
+        this.toast("Les deux nom sont identiques !", "danger")
       }
     },
     toggleCatDelForm(){

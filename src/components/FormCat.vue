@@ -14,15 +14,15 @@
       name="circular"
     ></loader>
     <div @click="toggleCatForm">
-      <h2>Add category</h2>
+      <h2>Ajouter une catégorie</h2>
       <img src="../assets/img/dropDown.png" ref="btnAddCat">
     </div>
     <div>
         <div>
-          <label for="getName">Enter the name for the new category</label>
-          <input type="text" id="getName" placeholder="Name here" v-model="nameC" />
+          <label for="getName">Entrez le nom pour la nouvelle catégorie</label>
+          <input type="text" id="getName" placeholder="Nom ici" v-model="nameC" />
         </div>
-      <button>Add +</button>
+      <button>Ajouter</button>
     </div>
   </form>
 </template>
@@ -61,19 +61,19 @@ export default {
               this.loading = false
             }else if (r.status && r.status === 200) {
               this.$store.commit("incrementAllLinks", r.cat);
-              this.toast("Category Create.", "success");
+              this.toast("Category créée", "success");
               this.loading = false
             } else {
-              this.toast("Something went wrong.", "error");
+              this.toast("Une erreur est survenue.", "error");
               this.loading = false
             }
           })
           .catch((e) => {
-            this.toast("An error was occured.", "danger")
+            this.toast("Une erreur est survenue.", "danger")
             this.loading = false
             });
       } else {
-        this.toast("Name is blank", "warning")
+        this.toast("Le nom est vide", "warning")
       }
     },
     toggleCatForm(){

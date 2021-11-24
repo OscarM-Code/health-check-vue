@@ -14,17 +14,12 @@
       name="circular"
     ></loader>
     <div @click="toggleDelLinkForm">
-      <h2>Modify or delete link</h2>
+      <h2>Modifier ou supprimer un lien</h2>
       <img src="../assets/img/dropDown.png" ref="btnDelLink" />
     </div>
     <section>
       <div>
-      <label for="getName"
-        >Choose the category, select the link which you want, and select if you
-        want to delete or modify. If you want to modify, select the method and
-        the category, and change the link. (You can just modify the method, or
-        just the category, etc...)</label
-      >
+      <label for="getName">Choisir une catégorie, séléctionner un lien, choix de l'actions, modifications des paramètres voulus.</label>
       <div>
         <label for="category">Category:</label>
         <select name="category" v-model="category" @change="selectLink">
@@ -37,25 +32,25 @@
         </select>
         <label for="delormod">Action:</label>
         <select name="delormod" v-model="action">
-          <option value="PUT">Modify</option>
-          <option value="DELETE">Delete</option>
+          <option value="PUT">Modifier</option>
+          <option value="DELETE">Supprimer</option>
         </select>
       </div>
-      <label for="allLink">Select the link:</label>
+      <label for="allLink">Selectionnez le lien:</label>
       <select name="allLink" v-model="selectedLink" @change="changeData">
         <option v-for="link in allLinks" :key="link.link" :value="link._id">{{
           link.link + " (" + link.method + ")"
         }}</option>
       </select>
       <div v-if="action === 'PUT'">
-        <label for="method">New method:</label>
+        <label for="method">Nouvelle méthode:</label>
         <select name="method" v-model="method">
           <option value="GET">GET</option>
           <option value="POST">POST</option>
           <option value="DELETE">DELETE</option>
           <option value="PUT">PUT</option>
         </select>
-        <label for="newCat">New category</label>
+        <label for="newCat">Nouvelle catégorie</label>
         <select name="newCat" v-model="newCat">
           <option
             v-for="list in this.categories"
@@ -65,10 +60,10 @@
           >
         </select>
       </div>
-      <label v-if="action === 'PUT'">Change link here:</label>
+      <label v-if="action === 'PUT'">Changez le lien ici:</label>
       <input v-if="action === 'PUT'" type="text" v-model="newLink" />
       </div>
-      <button>Validate</button>
+      <button>Valider</button>
     </section>
   </form>
 </template>
@@ -111,16 +106,16 @@ export default {
           this.allLinks = r.sites;
           this.newLink = r.sites[0]
             ? r.sites[0].link
-            : "This category is empty";
+            : "Cette catégorie est vide";
           this.selectedLink = r.sites[0]
             ? r.sites[0]._id
-            : "This category is empty";
+            : "Cette catégorie est vide";
           this.method = r.sites[0] ? r.sites[0].method : "GET";
           this.newCat = this.category;
         })
         .catch((e) => {
           console.log(e);
-          this.toast("An error was occured", "danger");
+          this.toast("Une erreur est survenue.", "danger");
         });
     },
     toggleDelLinkForm() {
@@ -168,16 +163,16 @@ export default {
             } else if (r.status === 400) {
               this.toast(r.message, "warning");
             } else {
-              this.toast("An error was occured", "danger");
+              this.toast("Une erreur est survenue.", "danger");
             }
           })
           .catch((e) => {
             console.log(e);
             this.loading = false;
-            this.toast("An error was occured", "danger");
+            this.toast("Une erreur est survenue.", "danger");
           });
       } else {
-        this.toast("You try to change with all same parameter", "warning");
+        this.toast("Tous les paramètres sont identiques !", "warning");
       }
     },
     use() {

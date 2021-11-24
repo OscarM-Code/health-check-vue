@@ -1,19 +1,19 @@
 <template>
     <div id="register">
         <div id="form">
-            <h1>Register Information</h1>
+            <h1>S'enregistrer</h1>
             <form @submit.prevent="register">
-                <label for="firstName">First Name</label>
-                <input type="text" id="firstName" placeholder="Enter your first name here." v-model="firstName">
-                <label for="lastName">Last Name</label>
-                <input type="text" id="lastName" placeholder="Enter your last name here." v-model="lastName">
+                <label for="firstName">Prénom</label>
+                <input type="text" id="firstName" placeholder="Entrez votre prénom ici." v-model="firstName">
+                <label for="lastName">Nom</label>
+                <input type="text" id="lastName" placeholder="Entrez votre nom ici." v-model="lastName">
                 <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Enter your mail address here." v-model="mail">
-                <label for="password">Password</label>
-                <input type="password" id="password" minlength="8" maxlength="15" placeholder="Password (8-15 characters)" v-model="password">
-                <button>Register</button>
+                <input type="email" id="email" placeholder="Entrez votre mail ici." v-model="mail">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" minlength="8" maxlength="15" placeholder="8 à 15 charactères" v-model="password">
+                <button>Créer</button>
             </form>
-            <p>Already have an account ? <a href="/login">Login</a></p>
+            <p>Vous avez déjà un compte ? <a href="/login"> Se connecter</a></p>
         </div>
     </div>
 </template>
