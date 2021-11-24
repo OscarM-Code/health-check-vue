@@ -193,6 +193,7 @@ html {
 
 .nav > div:nth-child(2)
 {
+  overflow: scroll;
   display: flex;
   flex-direction: column;
   border-radius: 2rem;
@@ -255,6 +256,8 @@ html {
   flex-wrap: wrap;
   transition: 0.5s;
   left: 0;
+  background: #000000;
+  z-index: 9999;
 }
 
 #logout.active
