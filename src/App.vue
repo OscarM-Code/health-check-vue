@@ -78,9 +78,9 @@ export default {
         let userData = await VueJwtDecode.decode(localStorage.getItem("token"));
         let link;
         if (userData.role === "ROLE_ADMIN") {
-          link = `http://localhost:3000/api/categories`;
+          link = `https://warm-inlet-55236.herokuapp.com/api/categories`;
         } else {
-          link = `http://localhost:3000/api/userCategories`;
+          link = `https://warm-inlet-55236.herokuapp.com/api/userCategories`;
         }
         await fetch(link, {
           method: "GET",
