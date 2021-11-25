@@ -9,7 +9,7 @@
                 <input type="password" id="password" placeholder="Mot de passe" v-model="password">
                 <button>Login</button>
             </form>
-            <p>Ou créer un compte: <a href="/register">S'enregistrer</a></p>
+            <p>Ou créer un compte: <a @click="this.$router.push('/register')">S'enregistrer</a></p>
         </div>
     </div>
 </template>
@@ -41,13 +41,11 @@ export default {
                 })
                 .then(response => response.json())
                 .then(r => {
-                    console.log(r);
                     if (r.status === 200) {
                         this.toast("Login successfully", 'success');
                         localStorage.setItem("token", r.thisUser.token);
-                        this.$router.push(`/items`);
                         setTimeout(() => {
-                        window.location.reload();
+                            this.$router.push(`/options`);
                         }, 300)
                     } else {
                         this.toast(r.message, 'danger');

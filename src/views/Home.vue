@@ -3,9 +3,9 @@
         <h1>Health-Check</h1>
         <p>Check health of your request for a link.</p>
         <div id="btn-div">
-            <a href="/login" class="btn">Se connecter</a>
+            <a class="btn" @click="this.$router.push('/login')">Se connecter</a>
             ou
-            <a href="/register" class="btn">S'enregistrer</a>
+            <a class="btn" @click="this.$router.push('/register')">S'enregistrer</a>
         </div>
     </div>
 </template>

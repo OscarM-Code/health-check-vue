@@ -1,118 +1,130 @@
 <template>
-    <div ref="nav" class="nav" v-if="userData">
-      <router-link to="/options" @click="toggleMenu">Options</router-link>
+  <div ref="nav" class="nav" v-if="userDatas">
+    <router-link to="/options" @click="toggleMenu">Options</router-link>
+    <div>
+      <p>Categories:</p>
+      <router-link
+        v-for="link in links"
+        :key="link"
+        :to="'/items/' + link.id"
+        @click="toggleMenu"
+      >
+        {{ link.name[0].toUpperCase() + link.name.slice(1) }}
+      </router-link>
+    </div>
+    <div id="logout" ref="logout">
       <div>
-        <p>Categories:</p>
-        <router-link v-for="link in links" :key="link" :to="'/items/' + link.id" @click="toggleMenu"> {{ link.name[0].toUpperCase() + link.name.slice(1) }} </router-link>
-        </div>
-      <div id="logout" ref="logout">
+        <p>Utilisateur:</p>
+        <h2>{{ userDatas.first_name + " " + userDatas.last_name }}</h2>
+      </div>
+      <img src="./assets/img/logout.png" @click="toggleLogout" />
+      <div>
+        <p>Se déconnecter ?</p>
         <div>
-          <p>Utilisateur:</p>
-          <h2>{{ userData.first_name + " " + userData.last_name }}</h2>
-        </div>
-        <img src="./assets/img/logout.png" @click="toggleLogout">
-        <div>
-          <p>Se déconnecter ?</p>
-          <div>
-            <button @click="logoutReturn">Oui</button>
-            <button @click="toggleLogout">Non</button>
-          </div>
+          <button @click="logoutReturn">Oui</button>
+          <button @click="toggleLogout">Non</button>
         </div>
       </div>
     </div>
-    <div ref="toogle" class="toggle" @click="toggleMenu" v-if="userData"></div>
-  <router-view/>
+  </div>
+  <div ref="toogle" class="toggle" @click="toggleMenu" v-if="userDatas"></div>
+  <router-view />
 </template>
 
 <script>
 import VueJwtDecode from "vue-jwt-decode";
 
 export default {
-  data(){
+  data() {
     return {
       storeLinks: this.$store.state.allLinks,
-      userData: localStorage.getItem("token") ? VueJwtDecode.decode(localStorage.getItem("token")) : null
-    }
+      userDatas: localStorage.getItem("token")
+        ? VueJwtDecode.decode(localStorage.getItem("token"))
+        : null,
+    };
   },
   computed: {
-    links(){
-      return this.$store.state.allLinks
-    }
+    links() {
+      return this.$store.state.allLinks;
+    },
   },
   methods: {
-    setBtn(){
+    setBtn() {
       this.value = this.$route.params.item ? this.$route.params.item : null;
     },
-    toggleMenu(){
-      this.$refs.nav.classList.toggle('active');
-      this.$refs.toogle.classList.toggle('active');
+    toggleMenu() {
+      this.$refs.nav.classList.toggle("active");
+      this.$refs.toogle.classList.toggle("active");
     },
-    toggleLogout(){
-      this.$refs.logout.classList.toggle('active');
+    toggleLogout() {
+      this.$refs.logout.classList.toggle("active");
     },
-    logout(){
+    logout() {
       localStorage.removeItem("token");
-      this.$router.push("/")
+      this.userDatas = null;
+      this.$router.push("/");
     },
-    logoutReturn(){
-      this.logout()
-      this.toggleMenu()
-      this.toggleLogout()
-      setTimeout(() => {
-        window.location.reload();
-      }, 500)
-    }
+    logoutReturn() {
+      this.logout();
+      this.toggleMenu();
+      this.toggleLogout();
+    },
   },
-  async beforeCreate() {
-    if(localStorage.getItem("token")){
-      let userData = await VueJwtDecode.decode(localStorage.getItem("token"));
-      let link;
-      if(userData.role === "ROLE_ADMIN"){
-        link = `https://warm-inlet-55236.herokuapp.com/api/categories`
-      }
-      else{
-        link = `https://warm-inlet-55236.herokuapp.com/api/userCategories`
-      }
-      await fetch(link, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          "x-access-token": localStorage.getItem("token")
+  watch: {
+    async $route(to, from) {
+      if (localStorage.getItem("token")) {
+        if (this.links.length !== 0) return;
+        let userData = await VueJwtDecode.decode(localStorage.getItem("token"));
+        let link;
+        if (userData.role === "ROLE_ADMIN") {
+          link = `http://localhost:3000/api/categories`;
+        } else {
+          link = `http://localhost:3000/api/userCategories`;
         }
-      })
-        .then((response) => response.json())
-        .then(async (links) => {
-          if (links.status && (r.status === 401 || links.status === 403)) {
-            this.logout();
-          }
-          await this.$store.commit('getAllLinks', links);
-          this.setBtn();
+        await fetch(link, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": localStorage.getItem("token"),
+          },
         })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  },
-  watch:{
-    $route (to, from){
-        if(to && to.href && to.href !== "/options"){
+          .then((response) => response.json())
+          .then(async (links) => {
+            if (links.status && (links.status == 401 || links.status == 403)) {
+              console.log("error");
+              this.logout();
+            }
+            this.userDatas = userData;
+            await this.$store.commit("getAllLinks", links);
             this.setBtn();
-        }
-    }
-  } 
-}
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+      if (
+        to &&
+        to.href &&
+        to.href !== "/options" &&
+        to.href !== "/" &&
+        to.href !== "/login" &&
+        to.href !== "/register"
+      ) {
+        this.setBtn();
+      }
+    },
+  },
+};
 </script>
 
 <style>
-
-*
-{
+* {
   margin: 0;
   padding: 0;
 }
 
 html {
-    overflow-y: overlay;
+  overflow-y: overlay;
 }
 
 #app {
@@ -136,8 +148,7 @@ html {
   transition: 0.3s;
 }
 
-.nav a:nth-child(1)
-{
+.nav a:nth-child(1) {
   margin: 10rem 0 1rem 0;
   border-bottom: 4px solid #ffffff;
   padding-bottom: 1rem;
@@ -150,49 +161,45 @@ html {
 }
 
 .nav a.router-link-exact-active {
-    color: transparent;
-    background: #833ab4;
-    background: -webkit-linear-gradient(to right, #fddd27, #1dbefd, #b852fc);
-    background: linear-gradient(to right, #fddd27, #1dbefd, #b852fc);
-    background-clip: text;
-    background-position: center;
-    background-repeat: no-repeat;
-    -webkit-background-clip: text;
-    border-image: linear-gradient(to right, #fddd27, #1dbefd, #b852fc) 1;
-    border-image: -webkit-linear-gradient(to right, #fddd27, #1dbefd, #b852fc) 1;
+  color: transparent;
+  background: #833ab4;
+  background: -webkit-linear-gradient(to right, #fddd27, #1dbefd, #b852fc);
+  background: linear-gradient(to right, #fddd27, #1dbefd, #b852fc);
+  background-clip: text;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  border-image: linear-gradient(to right, #fddd27, #1dbefd, #b852fc) 1;
+  border-image: -webkit-linear-gradient(to right, #fddd27, #1dbefd, #b852fc) 1;
 }
 
-.toggle
-{
-    position: fixed;
-    top: 25px;
-    right: 30px;
-    width: 50px;
-    height: 50px;
-    background: #000 url(./assets/img/menu.png);
-    background-size: 30px;
-    background-position: center;
-    background-repeat: no-repeat;
-    cursor: pointer;
-    z-index: 1000;
-    transition: 0.5s;
+.toggle {
+  position: fixed;
+  top: 25px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: #000 url(./assets/img/menu.png);
+  background-size: 30px;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  z-index: 1000;
+  transition: 0.5s;
 }
 
-.toggle:hover
-{
-    transform: scale(1.2);
+.toggle:hover {
+  transform: scale(1.2);
 }
 
-.toggle.active
-{
-    background: #000 url(./assets/img/close.png);
-    background-size: 25px;
-    background-position: center;
-    background-repeat: no-repeat;
+.toggle.active {
+  background: #000 url(./assets/img/close.png);
+  background-size: 25px;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.nav > div:nth-child(2)
-{
+.nav > div:nth-child(2) {
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
@@ -209,14 +216,12 @@ html {
   display: none;
 }
 
-.nav > div:nth-child(2) > p
-{
+.nav > div:nth-child(2) > p {
   font-size: 1.5rem;
   width: auto;
 }
 
-.nav > div:nth-child(2) > *
-{
+.nav > div:nth-child(2) > * {
   margin-right: 3%;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
@@ -225,35 +230,31 @@ html {
   text-align: end;
 }
 
-.nav > div:nth-child(2) > a:last-child
-{
+.nav > div:nth-child(2) > a:last-child {
   border-bottom-width: 4px;
 }
 
-.nav
-{
-    position: fixed;
-    background: #000;
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-end;
-    transition: 0.5s;
-    padding: 0 40px;
-    z-index: 1000;
-    right: -100%;
-    top: 0;
-    height: 100vh;
-    flex-direction: column;
-    min-width: 20rem;
+.nav {
+  position: fixed;
+  background: #000;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  transition: 0.5s;
+  padding: 0 40px;
+  z-index: 1000;
+  right: -100%;
+  top: 0;
+  height: 100vh;
+  flex-direction: column;
+  min-width: 20rem;
 }
 
-.nav.active
-{
-    right: 0;
+.nav.active {
+  right: 0;
 }
 
-#logout
-{
+#logout {
   width: 100%;
   border-top: 2px solid #ffffff;
   bottom: -10rem;
@@ -269,33 +270,30 @@ html {
   z-index: 9999;
 }
 
-#logout.active
-{
+#logout.active {
   bottom: 0;
 }
 
-#logout.active img
-{
+#logout.active img {
   transform: rotateZ(90deg);
-  filter: invert(12%) sepia(82%) saturate(470%) hue-rotate(352deg) brightness(98%) contrast(90%);
+  filter: invert(12%) sepia(82%) saturate(470%) hue-rotate(352deg)
+    brightness(98%) contrast(90%);
 }
 
-#logout img
-{
+#logout img {
   margin-top: 2rem;
-  filter: invert(12%) sepia(80%) saturate(6444%) hue-rotate(8deg) brightness(109%) contrast(124%);
+  filter: invert(12%) sepia(80%) saturate(6444%) hue-rotate(8deg)
+    brightness(109%) contrast(124%);
   height: 2rem;
   transition: 0.3s;
 }
 
-#logout img:hover
-{
+#logout img:hover {
   transform: scale(1.2);
   cursor: pointer;
 }
 
-#logout > div
-{
+#logout > div {
   height: 6rem;
   display: flex;
   align-items: flex-start;
@@ -304,13 +302,11 @@ html {
   margin-top: 0;
 }
 
-#logout > *
-{
+#logout > * {
   margin: 0 1.5rem;
 }
 
-#logout >div:nth-child(3)
-{
+#logout > div:nth-child(3) {
   height: 10rem;
   width: 100%;
   display: flex;
@@ -319,16 +315,14 @@ html {
   justify-content: start;
 }
 
-#logout > div:nth-child(3) p
-{
+#logout > div:nth-child(3) p {
   margin-top: 1rem;
   font-size: 2rem;
   color: red;
   font-weight: bold;
 }
 
-#logout >div:nth-child(3) button
-{
+#logout > div:nth-child(3) button {
   background: none;
   font-size: 1.5rem;
   border: 2px solid #ffffff;
@@ -338,127 +332,104 @@ html {
   transition: 0.3s;
 }
 
-#logout >div:nth-child(3) button:hover
-{
+#logout > div:nth-child(3) button:hover {
   transform: scale(1.2);
   color: #31d331;
   border-color: #31d331;
   cursor: pointer;
 }
 
-
-#logout >div:nth-child(3) div
-{
+#logout > div:nth-child(3) div {
   margin-top: 1rem;
 }
 
-@media only screen and (max-width : 400px) and (orientation: portrait) {
-
-  .nav
-  {
+@media only screen and (max-width: 400px) and (orientation: portrait) {
+  .nav {
     width: 100vw;
     padding: 0;
   }
 
-  .nav a:nth-child(1)
-  {
+  .nav a:nth-child(1) {
     margin-top: 5rem;
   }
 
-  .nav a, .nav div:nth-child(2) p
-  {
+  .nav a,
+  .nav div:nth-child(2) p {
     margin-right: 5% !important;
     width: 90% !important;
   }
 
-  .nav > div:nth-child(2)
-  {
+  .nav > div:nth-child(2) {
     overflow: scroll;
     margin-bottom: 6rem;
   }
 
-  #logout
-  {
+  #logout {
     background: #000;
     z-index: 9999;
   }
 
-  .toggle
-  {
+  .toggle {
     top: 0.5rem;
     right: 0.5rem;
   }
 }
 
-@media only screen and (max-width : 300px){
-
-    .nav
-  {
+@media only screen and (max-width: 300px) {
+  .nav {
     width: 100vw;
     padding: 0;
   }
 
-  .nav a:nth-child(1)
-  {
+  .nav a:nth-child(1) {
     margin-top: 5rem;
   }
 
-  .nav a, .nav div:nth-child(2) p
-  {
+  .nav a,
+  .nav div:nth-child(2) p {
     margin-right: 5% !important;
     width: 90% !important;
   }
 
-  .nav > div:nth-child(2)
-  {
+  .nav > div:nth-child(2) {
     overflow: scroll;
     margin-bottom: 6rem;
   }
 
-  #logout
-  {
+  #logout {
     background: #000;
     z-index: 9999;
   }
-
 }
 
-@media only screen and (max-width : 900px) and (orientation: landscape) {
-
-  .nav
-  {
+@media only screen and (max-width: 900px) and (orientation: landscape) {
+  .nav {
     width: 100%;
     height: 100vh;
     right: -100%;
     padding: 0;
   }
 
-  .nav a:nth-child(1)
-  {
+  .nav a:nth-child(1) {
     margin-top: 5rem;
   }
 
-  .nav a, .nav div:nth-child(2) p
-  {
+  .nav a,
+  .nav div:nth-child(2) p {
     margin-right: 5% !important;
     width: 90% !important;
   }
 
-  .nav > div:nth-child(2)
-  {
+  .nav > div:nth-child(2) {
     overflow: scroll;
     margin-bottom: 6rem;
   }
 
-  #logout
-  {
+  #logout {
     background: #000;
     z-index: 9999;
     bottom: -10rem;
     width: 100vw;
   }
-
 }
-
-
 </style>

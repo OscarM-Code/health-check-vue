@@ -13,7 +13,7 @@
                 <input type="password" id="password" minlength="8" maxlength="15" placeholder="8 à 15 charactères" v-model="password">
                 <button>Créer</button>
             </form>
-            <p>Vous avez déjà un compte ? <a href="/login"> Se connecter</a></p>
+            <p>Vous avez déjà un compte ? <a @click="this.$router.push('/login')"> Se connecter</a></p>
         </div>
     </div>
 </template>
