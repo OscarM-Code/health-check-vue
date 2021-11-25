@@ -65,6 +65,7 @@ export default {
     border: 2px solid;
     border-image: linear-gradient(to right, #fddd27, #1dbefd, #b852fc) 1;
     border-image: -webkit-linear-gradient(to right, #fddd27, #1dbefd, #b852fc) 1;
+    cursor: pointer;
 }
 
 #home div

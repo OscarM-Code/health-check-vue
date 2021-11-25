@@ -61,6 +61,7 @@ export default {
     },
     logout() {
       localStorage.removeItem("token");
+      this.$store.commit("clearAllLinks");
       this.userDatas = null;
       this.$router.push("/");
     },

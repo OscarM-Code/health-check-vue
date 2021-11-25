@@ -22,6 +22,9 @@ export default createStore({
     deleteAllLinks(state, category){
       let index = state.allLinks.findIndex(c => c.id === category);
       state.allLinks.splice(index, 1);
+    },
+    clearAllLinks(state){
+      state.allLinks = [];
     }
   },
   actions: {

@@ -46,7 +46,7 @@ export default {
                         localStorage.setItem("token", r.thisUser.token);
                         setTimeout(() => {
                             this.$router.push(`/options`);
-                        }, 300)
+                        }, 1000)
                     } else {
                         this.toast(r.message, 'danger');
                     }
