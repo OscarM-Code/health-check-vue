@@ -1,18 +1,5 @@
 <template>
   <form id="deleteLinkForm" method="POST" @submit.prevent="use" ref="delLink">
-        <loader
-      class="loader"
-      v-if="loading"
-      object="#ffffff"
-      color1="#77c207"
-      color2="#2c2c2c"
-      size="11"
-      speed="1.5"
-      bg="#343a40"
-      objectbg="#999793"
-      opacity="80"
-      name="circular"
-    ></loader>
     <div @click="toggleDelLinkForm">
       <h2>Modifier ou supprimer un lien</h2>
       <img src="../assets/img/dropDown.png" ref="btnDelLink" />
@@ -142,7 +129,7 @@ export default {
         (this.category !== this.newCat && this.action === "PUT") ||
         this.action === "DELETE"
       ) {
-        this.loading = true;
+        this.$emit("loaded", true);
         fetch(
           `https://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/links/${this.selectedLink}`,
           {
@@ -157,7 +144,7 @@ export default {
         )
           .then((response) => response.json())
           .then(async (r) => {
-            this.loading = false;
+            this.$emit("loaded", false);
             if (r.status === 200) {
               this.toast(r.message, "success");
             } else if (r.status === 400) {
@@ -165,10 +152,11 @@ export default {
             } else {
               this.toast("Une erreur est survenue.", "danger");
             }
+            this.changeData();
           })
           .catch((e) => {
             console.log(e);
-            this.loading = false;
+            this.$emit("loaded", false);
             this.toast("Une erreur est survenue.", "danger");
           });
       } else {

@@ -168,6 +168,13 @@ export default {
     margin-top: 1rem;
 }
 
+#form > p > a
+{
+    color: #461e61;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 @media only screen and (max-width : 420px) and (orientation: portrait) {
 
     #register #form

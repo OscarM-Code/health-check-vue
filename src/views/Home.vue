@@ -192,7 +192,7 @@ export default {
     }
 }
 
-@media (max-device-width: 1024px) and (orientation: landscape) {
+@media (min-width: 850px) and  (max-device-width: 1024px) and (orientation: landscape) {
 
     #home > div .btn
     {

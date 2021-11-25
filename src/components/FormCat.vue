@@ -1,18 +1,5 @@
 <template>
   <form ref="addCat" id="categoryForm" @submit.prevent="addCategory" method="POST">
-        <loader
-      class="loader"
-      v-if="loading"
-      object="#ffffff"
-      color1="#77c207"
-      color2="#2c2c2c"
-      size="11"
-      speed="1.5"
-      bg="#343a40"
-      objectbg="#999793"
-      opacity="80"
-      name="circular"
-    ></loader>
     <div @click="toggleCatForm">
       <h2>Ajouter une catégorie</h2>
       <img src="../assets/img/dropDown.png" ref="btnAddCat">
@@ -44,7 +31,7 @@ export default {
         name: this.nameC,
       };
       if (this.nameC) {
-        this.loading = true
+        this.$emit("loaded", true);
         fetch("https://warm-inlet-55236.herokuapp.com/api/categories", {
           method: "POST",
           headers: {
@@ -58,19 +45,20 @@ export default {
           .then(async (r) => {
             if (r.status && r.status === 400) {
               this.toast(r.message, "warning");
-              this.loading = false
+              this.$emit("loaded", false);
             }else if (r.status && r.status === 200) {
               this.$store.commit("incrementAllLinks", r.cat);
               this.toast("Category créée", "success");
-              this.loading = false
+              this.$emit("loaded", false);
             } else {
               this.toast("Une erreur est survenue.", "error");
-              this.loading = false
+              this.$emit("loaded", false);
             }
+            this.nameC = null;
           })
           .catch((e) => {
             this.toast("Une erreur est survenue.", "danger")
-            this.loading = false
+            this.$emit("loaded", false);
             });
       } else {
         this.toast("Le nom est vide", "warning")

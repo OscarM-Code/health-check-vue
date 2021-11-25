@@ -20,10 +20,10 @@
       opacity="80"
       name="circular"
     ></loader>
-    <Form1></Form1>
-    <Form2 :categories="storeCat" v-if="storeCat.length !== 0"></Form2>
-    <Form3 :categories="storeCat" v-if="storeCat.length !== 0"></Form3>
-    <Form4 :categories="storeCat" v-if="storeCat.length !== 0"></Form4>
+    <Form1 @loaded="updateLoading"></Form1>
+    <Form2 :categories="storeCat" v-if="storeCat.length !== 0" @loaded="updateLoading" @addLink="updateLinks"></Form2>
+    <Form3 :categories="storeCat" v-if="storeCat.length !== 0" @loaded="updateLoading"></Form3>
+    <Form4 :categories="storeCat" v-if="storeCat.length !== 0" @loaded="updateLoading" ref="formDel"></Form4>
   </div>
 </section>
 </template>
@@ -54,6 +54,14 @@ export default {
   },
   mounted() {
     this.loading = false;
+  },
+  methods: {
+    updateLoading(value) {
+      this.loading = value;
+    },
+    updateLinks(){
+      this.$refs.formDel.selectLink();
+    },
   },
 };
 </script>

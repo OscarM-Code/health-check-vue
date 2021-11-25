@@ -1,18 +1,5 @@
 <template>
   <form id="catDeleteForm" @submit.prevent="modDelCategory" method="POST" ref="delCat">
-        <loader
-      class="loader"
-      v-if="loading"
-      object="#ffffff"
-      color1="#77c207"
-      color2="#2c2c2c"
-      size="11"
-      speed="1.5"
-      bg="#343a40"
-      objectbg="#999793"
-      opacity="80"
-      name="circular"
-    ></loader>
     <div @click="toggleCatDelForm">
       <h2>Modifier ou supprimer une catégorie</h2>
       <img src="../assets/img/dropDown.png" ref="btnDelCat">
@@ -63,7 +50,7 @@ export default {
         name: this.newName
       };
       if (this.newName !== this.categories.find((i) => i.id === this.category).name || this.action === "DELETE") {
-        this.loading = true;
+        this.$emit("loaded", true);
         fetch(`https://warm-inlet-55236.herokuapp.com/api/user/${this.userData.userId}/categories/${this.category}`, {
           method: this.action,
           headers: {
@@ -75,19 +62,19 @@ export default {
         })
           .then((response) => response.json())
           .then(async (r) => {      
-            this.loading = false
+            this.$emit("loaded", false);
             if(this.action === "DELETE"){
-              if(r.message === "Category deleted."){
+              if(r.status === 200){
                 this.$store.commit("deleteAllLinks", this.category);
                 this.toast(r.message, "success");
-                this.category = "618511ce4efdc576ee585e52";
+                this.category = this.categories[0].id
                 }else{
                   this.toast(r.message, "danger")
                 }
             } else if(this.action === "PUT"){
-              if(r.message === "Category name modified."){
+              if(r.status === 200){
                   this.$store.commit("modifyAllLinks", {cat: this.category, name: this.newName});
-                  this.toast(r.message, "success")
+                  this.toast(r.message, "success");
                 }else{
                   this.toast(r.message, "danger")
                 }
@@ -96,7 +83,7 @@ export default {
           })
           .catch((e) => {
             console.log(e)
-            this.loading = false;
+            this.$emit("loaded", false);;
             this.toast("Une erreur est survenue.", "danger")
             });
       } else {

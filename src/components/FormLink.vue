@@ -1,18 +1,5 @@
 <template>
   <form id="linkForm" @submit.prevent="addLink" method="POST" ref="addLink">
-    <loader
-      class="loader"
-      v-if="loading"
-      object="#ffffff"
-      color1="#77c207"
-      color2="#2c2c2c"
-      size="11"
-      speed="1.5"
-      bg="#343a40"
-      objectbg="#999793"
-      opacity="80"
-      name="circular"
-    ></loader>
     <div @click="toggleLinkForm">
       <h2>Ajouter un lien<link rel="stylesheet" href="" /></h2>
       <img src="../assets/img/dropDown.png" ref="btnAddLink">
@@ -58,7 +45,7 @@ export default {
   },
   methods: {
     addLink() {
-      this.loading = true;
+      this.$emit("loaded", true);
       let data = {
         link: this.link,
         method: this.method,
@@ -78,18 +65,20 @@ export default {
         .then((response) => response.json())
         .then((r) => {
           if(r.status && r.status === 400) {
-            this.loading = false;
+            this.$emit("loaded", false);
             this.toast(r.message, "warning");
           } else if (r.status && r.status === 200) {
             this.toast("Lien ajouté", "success");
-            this.loading = false;
+            this.$emit("addLink");
+            this.$emit("loaded", false);
           } else {
-            this.loading = false;
+            this.$emit("loaded", false);
             this.toast("Une erreur est survenue.", "danger");
           }
+          this.link = null;
         })
         .catch((e) => {
-          this.loading = false;
+          this.$emit("loaded", false);
           this.toast("Une erreur est survenue.", "danger");
           console.log(e)
           });
